@@ -11,7 +11,8 @@ namespace doanimate {
 			public:
 				const bool has_ui_operations;
 
-				node(const bool has_ui_operations) : has_ui_operations(has_ui_operations) {
+				node(const bool has_ui_operations)
+					: has_ui_operations(has_ui_operations) {
 				}
 
 				virtual void update() = 0;
@@ -28,7 +29,10 @@ namespace doanimate {
 		
 		class default_node : public node {
 			protected:
-				std::function<std::vector<types::value>(std::vector<types::value>)> implementation;
+				using imp_t = std::function<
+					std::vector<types::value>(std::vector<types::value>)
+				>;
+				imp_t implementation;
 				const std::vector<types::type_info> input_type_infos;
 				const std::vector<std::string> input_names;
 				const std::vector<types::type_info> output_type_infos;
@@ -37,17 +41,25 @@ namespace doanimate {
 				std::vector<types::value> outputs;
 
 			public:
-				default_node(decltype(implementation) implementation, decltype(input_type_infos) input_type_infos,
-						decltype(input_names) input_names, decltype(output_type_infos) output_type_infos,
-						decltype(output_names) output_names, decltype(inputs) default_inputs)
-				: node(false), implementation(implementation), input_type_infos(input_type_infos), 
-				  input_names(input_names), output_type_infos(output_type_infos), output_names(output_names), inputs(default_inputs) {
+				default_node(imp_t implementation,
+						decltype(input_type_infos) input_type_infos,
+						decltype(input_names) input_names,
+						decltype(output_type_infos) output_type_infos,
+						decltype(output_names) output_names,
+						decltype(inputs) default_inputs)
+				: node(false), implementation(implementation),
+				  input_type_infos(input_type_infos), input_names(input_names),
+				  output_type_infos(output_type_infos), output_names(output_names),
+				  inputs(default_inputs) {
 				}
 
-				default_node(decltype(implementation) implementation, decltype(input_type_infos) input_type_infos,
-						decltype(input_names) input_names, decltype(output_type_infos) output_type_infos,
+				default_node(decltype(implementation) implementation,
+						decltype(input_type_infos) input_type_infos,
+						decltype(input_names) input_names,
+						decltype(output_type_infos) output_type_infos,
 						decltype(output_names) output_names)
-				: default_node(implementation, input_type_infos, input_names, output_type_infos, output_names,
+				: default_node(implementation, input_type_infos, input_names,
+						output_type_infos, output_names,
 						decltype(inputs)(input_type_infos.size(), false)) {
 				}
 
