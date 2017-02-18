@@ -1,4 +1,4 @@
-add_library (helpers ranges.hh ranges.cc variadic.hh)
+add_library (helpers variadic.hh)
 
 link_directories (${Boost_LIBRARY_DIRS})
 
