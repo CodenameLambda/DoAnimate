@@ -41,32 +41,45 @@ namespace doanimate {
 				inline type_info(const type_info_enum cat) : category(cat) {
 				}
 
-				inline type_info(const type_info_enum cat, type_info ext) : category(cat), single_extension(new type_info(ext)) {
+				inline type_info(const type_info_enum cat, type_info ext)
+					: category(cat), single_extension(new type_info(ext)) {
 				}
 
-				inline type_info(const type_info_enum cat, std::vector<type_info> group) : category(cat), first_group(group) {
+				inline type_info(const type_info_enum cat,
+						std::vector<type_info> group)
+					: category(cat), first_group(group) {
 				}
 
-				inline type_info(const type_info_enum cat, type_info ext, std::vector<type_info> group)
-				: category(cat), single_extension(new type_info(ext)), first_group(group) {
+				inline type_info(const type_info_enum cat, type_info ext,
+						std::vector<type_info> group)
+					: category(cat), single_extension(new type_info(ext)),
+					  first_group(group) {
 				}
 
-				inline type_info(const type_info_enum cat, std::vector<type_info> first, std::vector<type_info> second)
-				: category(cat), first_group(first), second_group(second) {
+				inline type_info(const type_info_enum cat,
+						std::vector<type_info> first,
+						std::vector<type_info> second)
+					: category(cat), first_group(first), second_group(second) {
 				}
 
-				inline type_info(const type_info_enum cat, type_info ext, std::vector<type_info> first, std::vector<type_info> second)
-				: category(cat), single_extension(new type_info(ext)), first_group(first), second_group(second) {
+				inline type_info(const type_info_enum cat, type_info ext,
+						std::vector<type_info> first,
+						std::vector<type_info> second)
+					: category(cat), single_extension(new type_info(ext)), first_group(first), second_group(second) {
 				}
 
-				inline type_info(const size_t index) : category(type_info_enum::generic), generic_index(index) {
+				inline type_info(const size_t index)
+					: category(type_info_enum::generic), generic_index(index) {
 				}
 
 				inline type_info(const type_info other, const std::string lbl)
-				: category(other.category), single_extension(other.single_extension), first_group(other.first_group),
-				  second_group(other.second_group), generic_index(other.generic_index), lbl(lbl) {
+					: category(other.category),
+					  single_extension(other.single_extension),
+					  first_group(other.first_group),
+					  second_group(other.second_group),
+					  generic_index(other.generic_index), lbl(lbl) {
 				}
-				
+
 				public:
 				inline type_info() : type_info(type_info_enum::tuple) {
 				}
@@ -80,7 +93,8 @@ namespace doanimate {
 						if (b.single_extension != nullptr)
 							if (*a.single_extension != *b.single_extension)
 								return false;
-							else;
+							else
+								;
 						else
 							return false;
 					else
@@ -108,7 +122,9 @@ namespace doanimate {
 						return false;
 					if (a.single_extension != nullptr)
 						if (b.single_extension != nullptr)
-							if (not (*a.single_extension).is_equivalent(*b.single_extension))
+							if (not (*a.single_extension).is_equivalent(
+										*b.single_extension
+									))
 								return false;
 							else;
 						else
@@ -119,12 +135,16 @@ namespace doanimate {
 					if (a.first_group.size() != b.first_group.size())
 						return false;
 					for (size_t i = 0; i < a.first_group.size(); ++i)
-						if (not a.first_group[i].is_equivalent(b.first_group[i]))
+						if (not a.first_group[i].is_equivalent(
+									b.first_group[i]
+								))
 							return false;
 					if (a.second_group.size() != b.second_group.size())
 						return false;
 					for (size_t i = 0; i < a.second_group.size(); ++i)
-						if (not a.second_group[i].is_equivalent(b.second_group[i]))
+						if (not a.second_group[i].is_equivalent(
+									b.second_group[i]
+								))
 							return false;
 					if (a.generic_index != b.generic_index)
 						return false;
@@ -259,7 +279,10 @@ namespace doanimate {
 				}
 
 				static inline type_info tuple(const type_info of, const size_t times) {
-					return type_info(type_info_enum::tuple, std::vector<type_info>(times, of));
+					return type_info(
+							type_info_enum::tuple,
+							std::vector<type_info>(times, of)
+						);
 				}
 
 				static inline type_info tuple(const std::vector<type_info> types) {
@@ -270,11 +293,13 @@ namespace doanimate {
 					return type_info(index);
 				}
 
-				static inline type_info function(const type_info ret, const std::vector<type_info> args) {
+				static inline type_info function(const type_info ret,
+						const std::vector<type_info> args) {
 					return type_info(type_info_enum::function, ret, args);
 				}
 
-				static inline type_info code(const std::vector<type_info> inputs, const std::vector<type_info> outputs) {
+				static inline type_info code(const std::vector<type_info> inputs,
+						const std::vector<type_info> outputs) {
 					return type_info(type_info_enum::code, inputs, outputs);
 				}
 
@@ -325,7 +350,7 @@ namespace doanimate {
 			std::vector<boost::recursive_variant_>,
 			tuple<boost::recursive_variant_>,
 			std::string
-		>::type;
+				>::type;
 
 
 		namespace representations {
