@@ -40,8 +40,8 @@ namespace doanimate {
 				default_node(decltype(implementation) implementation, decltype(input_type_infos) input_type_infos,
 						decltype(input_names) input_names, decltype(output_type_infos) output_type_infos,
 						decltype(output_names) output_names, decltype(inputs) default_inputs)
-				: node(false), implementation(implementation), input_type_infos(input_type_infos), output_type_infos(output_type_infos),
-				inputs(default_inputs), input_names(input_names), output_names(output_names) {
+				: node(false), implementation(implementation), input_type_infos(input_type_infos), 
+				  input_names(input_names), output_type_infos(output_type_infos), output_names(output_names), inputs(default_inputs) {
 				}
 
 				default_node(decltype(implementation) implementation, decltype(input_type_infos) input_type_infos,
