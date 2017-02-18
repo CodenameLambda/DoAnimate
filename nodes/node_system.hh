@@ -15,7 +15,8 @@ namespace doanimate {
 			node* n;
 			std::vector<std::pair<size_t, size_t>> input_links;
 
-			inline node_wrapper(node* n) : n(n), input_links(n->get_inputs().size(), {-1, 0}) {
+			inline node_wrapper(node* n)
+				: n(n), input_links(n->get_inputs().size(), {-1, 0}) {
 			}
 		};
 
@@ -32,7 +33,8 @@ namespace doanimate {
 					T current;
 					T end;
 
-					iterator_base(T begin, T end) : begin(begin), current(begin), end(end) {
+					iterator_base(T begin, T end)
+						: begin(begin), current(begin), end(end) {
 						while (*current == boost::none and current != end)
 							++ current;
 					}
@@ -92,7 +94,8 @@ namespace doanimate {
 
 				void quick_add(node* n);
 
-				void rerun(const std::unordered_set<size_t> source, const bool skip_first_stage = false);
+				void rerun(const std::unordered_set<size_t> source,
+						const bool skip_first_stage = false);
 
 				template <typename... Ts>
 					void rerun(size_t first, Ts... data) {
@@ -108,11 +111,14 @@ namespace doanimate {
 
 				void rerun();
 
-				bool would_create_cycle(const size_t node, const std::pair<size_t, size_t> connection) const;
+				bool would_create_cycle(const size_t node,
+						const std::pair<size_t, size_t> connection) const;
 
-				void force_connection(const size_t node, const size_t index, const std::pair<size_t, size_t> connection);
+				void force_connection(const size_t node, const size_t index,
+						const std::pair<size_t, size_t> connection);
 
-				bool create_connection(const size_t node, const size_t index, const std::pair<size_t, size_t> connection);
+				bool create_connection(const size_t node, const size_t index,
+						const std::pair<size_t, size_t> connection);
 		};
 	}
 }

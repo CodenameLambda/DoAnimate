@@ -56,7 +56,8 @@ namespace doanimate {
 			nodes.push_back(node_wrapper(n));
 		}
 
-		void node_system::rerun(const std::unordered_set<size_t> source, const bool skip_first_stage) {
+		void node_system::rerun(const std::unordered_set<size_t> source,
+				const bool skip_first_stage) {
 			std::unordered_set<size_t> done;
 			size_t alive = 0;
 
@@ -76,11 +77,14 @@ namespace doanimate {
 							bool needs_computation = false;
 							for (const auto& j : i.get().input_links)
 								if (j.first != size_t(-1)) {
-									if (visited.find(j.first) == visited.end()) {
-										dependencies_not_visited = true;
+									if (visited.find(j.first) ==
+											visited.end()) {
+										dependencies_not_visited
+											= true;
 										break;
 									}
-									else if (done.find(j.first) == done.end()) {
+									else if (done.find(j.first) ==
+											done.end()) {
 										needs_computation = true;
 										break;
 									}
@@ -119,7 +123,10 @@ namespace doanimate {
 							for (const auto& i : i.get().input_links) {
 								++ index2;
 								if (i.first != size_t(-1))
-									vec[index2] = nodes[i.first].get().n->get_outputs()[i.second];
+									vec[index2] = nodes[i.first]
+										.get().n->get_outputs()[
+											i.second
+										];
 							}
 							n->update();
 
@@ -141,7 +148,8 @@ namespace doanimate {
 			rerun(std::unordered_set<size_t>{}, true);
 		}
 
-		bool node_system::would_create_cycle(const size_t node, const std::pair<size_t, size_t> connection) const {
+		bool node_system::would_create_cycle(const size_t node, const std::pair<size_t,
+				size_t> connection) const {
 			std::unordered_set<size_t> dependencies;
 			std::unordered_set<size_t> level{connection.first};
 
@@ -162,7 +170,8 @@ namespace doanimate {
 				for (const auto& i : level)
 					for (const auto& j : nodes[i].get().input_links)
 						if (j.first != size_t(-1))
-							if (dependencies.find(j.first) == dependencies.end()) {
+							if (dependencies.find(j.first) ==
+									dependencies.end()) {
 								dependency_added = true;
 								next_level.insert(j.first);
 							}
@@ -177,11 +186,13 @@ namespace doanimate {
 			}
 		}
 
-		void node_system::force_connection(const size_t node, const size_t index, const std::pair<size_t, size_t> connection) {
+		void node_system::force_connection(const size_t node, const size_t index,
+				const std::pair<size_t, size_t> connection) {
 			nodes[node].get().input_links[index] = connection;
 		}
 
-		bool node_system::create_connection(const size_t node, const size_t index, const std::pair<size_t, size_t> connection) {
+		bool node_system::create_connection(const size_t node, const size_t index,
+				const std::pair<size_t, size_t> connection) {
 			if (!would_create_cycle(node, connection)) {
 				force_connection(node, index, connection);
 				return true;
