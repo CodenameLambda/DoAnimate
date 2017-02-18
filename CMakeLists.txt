@@ -1,6 +1,5 @@
 cmake_minimum_required (VERSION 2.6)
 
-# add_definitions (-std=c++1z -O3 -Os)
 add_definitions (-std=c++11 -O0 -g)
 
 set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
