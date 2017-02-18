@@ -11,13 +11,23 @@ namespace doanimate {
 			const type_info type_info::any = type_info_enum::any;
 			const type_info type_info::string = type_info_enum::string;
 			const type_info type_info::none = type_info::tuple({});
-			const type_info type_info::position = type_info::tuple(type_info::number, 2).labeled("position");
+			const type_info type_info::position = type_info::tuple(type_info::number, 2)
+				.labeled("position");
 			const type_info type_info::position2d = type_info::position;
-			const type_info type_info::position3d = type_info::tuple(type_info::number, 3).labeled("position3d");
-			const type_info type_info::color = type_info::tuple(type_info::number, 4).labeled("color");
-			const type_info type_info::color_without_alpha = type_info::position3d.labeled("color_without_alpha");
-			const type_info type_info::renderable = type_info::function(type_info::color, {type_info::position2d}).labeled("renderable");
-			const type_info type_info::sound = type_info::function(type_info::number, {type_info::number}).labeled("sound");
+			const type_info type_info::position3d = type_info::tuple(type_info::number, 3)
+				.labeled("position3d");
+			const type_info type_info::color = type_info::tuple(type_info::number, 4)
+				.labeled("color");
+			const type_info type_info::color_without_alpha = type_info::position3d
+				.labeled("color_without_alpha");
+			const type_info type_info::renderable = type_info::function(
+					type_info::color,
+					{type_info::position2d}
+				).labeled("renderable");
+			const type_info type_info::sound = type_info::function(
+					type_info::number,
+					{type_info::number}
+				).labeled("sound");
 		}
 
 		type_info simplify(const type_info t) {
@@ -71,10 +81,10 @@ namespace doanimate {
 
 		const std::map<type_info, std::string> names {
 			{type_info::boolean, "boolean"},
-			{type_info::integer, "integer"},
-			{type_info::number, "number"},
-			{type_info::string, "string"},
-			{type_info::any, "any"}
+				{type_info::integer, "integer"},
+				{type_info::number, "number"},
+				{type_info::string, "string"},
+				{type_info::any, "any"}
 		};
 
 		std::string to_string(const type_info t) {
