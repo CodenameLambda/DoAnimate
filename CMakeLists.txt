@@ -12,13 +12,14 @@ set (CMAKE_USE_RELATIVE_PATHS TRUE)
 
 add_subdirectory (nodes)
 add_subdirectory (shapes)
-add_subdirectory (helpers)
+# add_subdirectory (helpers)
 
 set (DoAnimate_VERSION_MAJOR 1)
 set (DoAnimate_VERSION_MINOR 0)
 
 add_executable (DoAnimate main.cc types.hh types.cc)
-target_link_libraries (DoAnimate nodes shapes helpers)
+# target_link_libraries (DoAnimate nodes shapes helpers)
+target_link_libraries (DoAnimate nodes shapes)
 
 link_directories (${Boost_LIBRARY_DIRS})
 
