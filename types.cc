@@ -81,10 +81,10 @@ namespace doanimate {
 
 		const std::map<type_info, std::string> names {
 			{type_info::boolean, "boolean"},
-				{type_info::integer, "integer"},
-				{type_info::number, "number"},
-				{type_info::string, "string"},
-				{type_info::any, "any"}
+			{type_info::integer, "integer"},
+			{type_info::number, "number"},
+			{type_info::string, "string"},
+			{type_info::any, "any"}
 		};
 
 		std::string to_string(const type_info t) {
