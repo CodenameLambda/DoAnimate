@@ -3,60 +3,60 @@
 
 namespace doanimate {
 	namespace nodes {
-		node_system::iterator node_system::begin() {
+		NodeSystem::iterator NodeSystem::begin() {
 			return iterator(nodes.begin(), nodes.end());
 		}
 
-		node_system::iterator node_system::end() {
+		NodeSystem::iterator NodeSystem::end() {
 			return iterator(nodes.end(), nodes.end());
 		}
 
-		node_system::const_iterator node_system::cbegin() const {
+		NodeSystem::const_iterator NodeSystem::cbegin() const {
 			return const_iterator(nodes.cbegin(), nodes.cend());
 		}
 
-		node_system::const_iterator node_system::cend() const {
+		NodeSystem::const_iterator NodeSystem::cend() const {
 			return const_iterator(nodes.cbegin(), nodes.cend());
 		}
 
-		node_system::const_iterator node_system::begin() const {
+		NodeSystem::const_iterator NodeSystem::begin() const {
 			return cbegin();
 		}
 
-		node_system::const_iterator node_system::end() const {
+		NodeSystem::const_iterator NodeSystem::end() const {
 			return cend();
 		}
 
-		node_wrapper& node_system::at(size_t index) {
+		NodeWrapper& NodeSystem::at(size_t index) {
 			return nodes[index].get();
 		}
 
-		void node_system::remove(node_system::iterator it) {
+		void NodeSystem::remove(NodeSystem::iterator it) {
 			*(it.current) = boost::none;
 		}
 
-		void node_system::remove(const size_t index) {
+		void NodeSystem::remove(const size_t index) {
 			nodes[index] = boost::none;
 		}
 
-		size_t node_system::add(node* n) {
+		size_t NodeSystem::add(Node* n) {
 			size_t index = 0;
 			for (auto& i : nodes)
 				if (i == boost::none) {
-					i = node_wrapper(n);
+					i = NodeWrapper(n);
 					return index;
 				}
 				else
 					++ index;
-			nodes.push_back(node_wrapper(n));
+			nodes.push_back(NodeWrapper(n));
 			return nodes.size() - 1;
 		}
 
-		void node_system::quick_add(node* n) {
-			nodes.push_back(node_wrapper(n));
+		void NodeSystem::quick_add(Node* n) {
+			nodes.push_back(NodeWrapper(n));
 		}
 
-		void node_system::rerun(const std::unordered_set<size_t> source,
+		void NodeSystem::rerun(const std::unordered_set<size_t> source,
 				const bool skip_first_stage) {
 			std::unordered_set<size_t> done;
 			size_t alive = 0;
@@ -117,7 +117,7 @@ namespace doanimate {
 								}
 
 						if (ready) {
-							node* n = i.get().n;
+							Node* n = i.get().n;
 							auto& vec = n->get_inputs();
 							size_t index2 = -1;
 							for (const auto& i : i.get().input_links) {
@@ -137,18 +137,18 @@ namespace doanimate {
 			}
 		}
 
-		void node_system::rerun(const std::unordered_set<node_system::iterator*> source) {
+		void NodeSystem::rerun(const std::unordered_set<NodeSystem::iterator*> source) {
 			std::unordered_set<size_t> out(source.bucket_count());
 			for (auto& i : source)
 				out.insert(i->index());
 			rerun(out);
 		}
 
-		void node_system::rerun() {
+		void NodeSystem::rerun() {
 			rerun(std::unordered_set<size_t>{}, true);
 		}
 
-		bool node_system::would_create_cycle(const size_t node, const std::pair<size_t,
+		bool NodeSystem::would_create_cycle(const size_t node, const std::pair<size_t,
 				size_t> connection) const {
 			std::unordered_set<size_t> dependencies;
 			std::unordered_set<size_t> level{connection.first};
@@ -186,12 +186,12 @@ namespace doanimate {
 			}
 		}
 
-		void node_system::force_connection(const size_t node, const size_t index,
+		void NodeSystem::force_connection(const size_t node, const size_t index,
 				const std::pair<size_t, size_t> connection) {
 			nodes[node].get().input_links[index] = connection;
 		}
 
-		bool node_system::create_connection(const size_t node, const size_t index,
+		bool NodeSystem::create_connection(const size_t node, const size_t index,
 				const std::pair<size_t, size_t> connection) {
 			if (!would_create_cycle(node, connection)) {
 				force_connection(node, index, connection);
