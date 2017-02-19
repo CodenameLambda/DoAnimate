@@ -315,6 +315,8 @@ namespace doanimate {
 				inline ~type_info() {
 					delete single_extension;
 				}
+
+				friend struct std::hash<type_info>;
 			};
 		}
 
@@ -368,5 +370,12 @@ namespace doanimate {
 		type_info apply_specialization(const type_info, const std::vector<type_info>);
 		std::string to_string(const type_info);
 	}
+}
+
+namespace std {
+	template <>
+	struct hash<doanimate::types::type_info> {
+		size_t operator()(const doanimate::types::type_info&) const;
+	};
 }
 #endif

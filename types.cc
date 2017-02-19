@@ -1,5 +1,5 @@
 #include "types.hh"
-#include <map>
+#include <unordered_map>
 
 
 namespace doanimate {
@@ -79,7 +79,7 @@ namespace doanimate {
 			return out + "]";
 		}
 
-		const std::map<type_info, std::string> names {
+		const std::unordered_map<type_info, std::string> names {
 			{type_info::boolean, "boolean"},
 			{type_info::integer, "integer"},
 			{type_info::number, "number"},
@@ -91,21 +91,65 @@ namespace doanimate {
 			if (t.has_label())
 				return t.label();
 			else if (t.is_code())
-				return "code[" + to_string(t.code_inputs()) + ", " + to_string(t.code_outputs()) + "]";
+				return "code[" + to_string(t.code_inputs()) + ", " +
+					to_string(t.code_outputs()) + "]";
 			else if (t.is_list())
 				return "list[" + to_string(t.list_of()) + "]";
 			else if (t.is_repeated_tuple())
-				return "tuple[" + to_string(t.repeated_tuple_of()) + ", " + std::to_string(t.repeated_tuple_length()) + "]";
+				return "tuple[" + to_string(t.repeated_tuple_of()) + ", " +
+					std::to_string(t.repeated_tuple_length()) + "]";
 			else if (t.is_tuple())
 				return "tuple" + to_string(t.tuple_types());
 			else if (t.is_function())
-				return "function[" + to_string(t.function_return_type()) + ", " + to_string(t.function_arguments()) + "]";
+				return "function[" + to_string(t.function_return_type()) + ", " +
+					to_string(t.function_arguments()) + "]";
 			else if (t.is_specialization())
-				return "specialize[" + to_string(t.specialization_template()) + ", " + to_string(t.specialization_parameters()) + "]";
+				return "specialize[" + to_string(t.specialization_template()) + ", " +
+					to_string(t.specialization_parameters()) + "]";
 			else if (t.is_generic_parameter())
-				return "template_parameter[" + std::to_string(t.generic_parameter_index()) + "]";
+				return "template_parameter[" +
+					std::to_string(t.generic_parameter_index()) + "]";
 			else
-				return (*names.find(t)).second;
+				return names.find(t)->second;
 		}
+	}
+}
+
+size_t combine_hashes(std::vector<size_t> hashes) {
+	size_t out = 0;
+	for (const auto& i : hashes)
+		out ^= i;
+	return out;
+}
+
+using da_type_info = doanimate::types::type_info;
+
+const std::unordered_map<da_type_info, size_t> hashes {
+	{da_type_info::boolean, 1},
+	{da_type_info::integer, 3},
+	{da_type_info::number, 5},
+	{da_type_info::string, 7},
+	{da_type_info::any, 9}
+};
+
+namespace std {
+	size_t hash<da_type_info>::operator()(const da_type_info& t) const {
+		auto it = hashes.find(t);
+		if (it == hashes.end()) {
+			std::vector<size_t> out{
+				size_t(t.category),
+				(t.single_extension == nullptr)? 0 : operator()(*t.single_extension),
+				t.generic_index
+			};
+			out.resize(out.size() + t.first_group.size() + t.second_group.size());
+			size_t index = 2;
+			for (const auto& i : t.first_group)
+				out[++index] = operator()(i);
+			for (const auto& i : t.second_group)
+				out[++index] = operator()(i);
+			return combine_hashes(out);
+		}
+		else
+			return it->second;
 	}
 }
