@@ -1,5 +1,5 @@
-#ifndef node_node_system_h
-#define node_node_system_h
+#ifndef node_NodeSystem_h
+#define node_NodeSystem_h
 #include <vector>
 #include <tuple>
 #include <unordered_set>
@@ -11,29 +11,29 @@
 
 namespace doanimate {
 	namespace nodes {
-		struct node_wrapper {
-			node* n;
+		struct NodeWrapper {
+			Node* n;
 			std::vector<std::pair<size_t, size_t>> input_links;
 
-			inline node_wrapper(node* n)
+			inline NodeWrapper(Node* n)
 				: n(n), input_links(n->get_inputs().size(), {-1, 0}) {
 			}
 		};
 
 
-		class node_system {
+		class NodeSystem {
 			protected:
-				std::vector<boost::optional<node_wrapper>> nodes;
+				std::vector<boost::optional<NodeWrapper>> nodes;
 
 			public:
 				template <typename T>
-				class iterator_base {
+				class IteratorBase {
 					protected:
 					T begin;
 					T current;
 					T end;
 
-					iterator_base(T begin, T end)
+					IteratorBase(T begin, T end)
 						: begin(begin), current(begin), end(end) {
 						while (*current == boost::none and current != end)
 							++ current;
@@ -41,21 +41,21 @@ namespace doanimate {
 
 					public:
 
-					iterator_base() {
+					IteratorBase() {
 					}
 
-					iterator_base<T> operator++() {
+					IteratorBase<T> operator++() {
 						++ current;
 						while (*current == boost::none and current != end)
 							++ current;
 						return *this;
 					}
 
-					node_wrapper& operator*() {
+					NodeWrapper& operator*() {
 						return (*current).value();
 					}
 
-					node_wrapper* operator->() {
+					NodeWrapper* operator->() {
 						return &*current;
 					}
 
@@ -63,13 +63,13 @@ namespace doanimate {
 						return current - begin;
 					}
 
-					friend node_system;
+					friend NodeSystem;
 				};
 
-				using iterator = iterator_base<decltype(nodes)::iterator>;
-				using const_iterator = iterator_base<decltype(nodes)::const_iterator>;
+				using iterator = IteratorBase<decltype(nodes)::iterator>;
+				using const_iterator = IteratorBase<decltype(nodes)::const_iterator>;
 
-				inline node_system() {
+				inline NodeSystem() {
 				}
 
 				iterator begin();
@@ -84,15 +84,15 @@ namespace doanimate {
 
 				const_iterator end() const;
 
-				node_wrapper& at(size_t index);
+				NodeWrapper& at(size_t index);
 
 				void remove(iterator it);
 
 				void remove(const size_t index);
 
-				size_t add(node* n);
+				size_t add(Node* n);
 
-				void quick_add(node* n);
+				void quick_add(Node* n);
 
 				void rerun(const std::unordered_set<size_t> source,
 						const bool skip_first_stage = false);
