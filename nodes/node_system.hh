@@ -9,116 +9,146 @@
 #include "../helpers/variadic.hh"
 
 
-namespace doanimate {
-	namespace nodes {
-		struct NodeWrapper {
+namespace doanimate
+{
+	namespace nodes
+	{
+		struct NodeWrapper
+		{
 			Node* n;
 			std::vector<std::pair<size_t, size_t>> input_links;
 
 			inline NodeWrapper(Node* n)
-				: n(n), input_links(n->get_inputs().size(), {-1, 0}) {
-			}
+			: n(n),
+			  input_links(n->get_inputs().size(), {-1, 0})
+			{}
 		};
 
 
-		class NodeSystem {
+		class NodeSystem
+		{
 			protected:
-				std::vector<boost::optional<NodeWrapper>> nodes;
+			std::vector<boost::optional<NodeWrapper>> nodes;
 
 			public:
-				template <typename T>
-				class IteratorBase {
-					protected:
-					T begin;
-					T current;
-					T end;
+			template <typename T>
+			class IteratorBase
+			{
+				protected:
+				T begin;
+				T current;
+				T end;
 
-					IteratorBase(T begin, T end)
-						: begin(begin), current(begin), end(end) {
-						while (*current == boost::none and current != end)
-							++ current;
-					}
-
-					public:
-
-					IteratorBase() {
-					}
-
-					IteratorBase<T> operator++() {
+				IteratorBase(
+					T begin,
+					T end
+				)
+				: begin(begin),
+				  current(begin),
+				  end(end)
+				{
+					while (*current == boost::none and current != end)
 						++ current;
-						while (*current == boost::none and current != end)
-							++ current;
-						return *this;
-					}
-
-					NodeWrapper& operator*() {
-						return (*current).value();
-					}
-
-					NodeWrapper* operator->() {
-						return &*current;
-					}
-
-					size_t index() const {
-						return current - begin;
-					}
-
-					friend NodeSystem;
-				};
-
-				using iterator = IteratorBase<decltype(nodes)::iterator>;
-				using const_iterator = IteratorBase<decltype(nodes)::const_iterator>;
-
-				inline NodeSystem() {
 				}
 
-				iterator begin();
+				public:
+				IteratorBase()
+				{}
 
-				iterator end();
+				IteratorBase<T> operator++()
+				{
+					++ current;
 
-				const_iterator cbegin() const;
+					while (*current == boost::none and current != end)
+						++ current;
 
-				const_iterator cend() const;
+					return *this;
+				}
 
-				const_iterator begin() const;
+				NodeWrapper& operator*()
+				{
+					return (*current).value();
+				}
 
-				const_iterator end() const;
+				NodeWrapper* operator->()
+				{
+					return &*current;
+				}
 
-				NodeWrapper& at(size_t index);
+				size_t index() const
+				{
+					return current - begin;
+				}
 
-				void remove(iterator it);
+				friend NodeSystem;
+			};
 
-				void remove(const size_t index);
+			using iterator = IteratorBase<decltype(nodes)::iterator>;
 
-				size_t add(Node* n);
+			using const_iterator = IteratorBase<decltype(nodes)::const_iterator>;
 
-				void quick_add(Node* n);
+			inline NodeSystem()
+			{}
 
-				void rerun(const std::unordered_set<size_t> source,
-						const bool skip_first_stage = false);
+			iterator begin();
 
-				template <typename... Ts>
-					void rerun(size_t first, Ts... data) {
-						return rerun(helpers::unordered_set_of(first, data...));
-					}
+			iterator end();
 
-				void rerun(const std::unordered_set<iterator*> source);
+			const_iterator cbegin() const;
 
-				template <typename... Ts>
-					void rerun(iterator* first, Ts... data) {
-						return rerun(helpers::unordered_set_of(first, data...));
-					}
+			const_iterator cend() const;
 
-				void rerun();
+			const_iterator begin() const;
 
-				bool would_create_cycle(const size_t node,
-						const std::pair<size_t, size_t> connection) const;
+			const_iterator end() const;
 
-				void force_connection(const size_t node, const size_t index,
-						const std::pair<size_t, size_t> connection);
+			NodeWrapper& at(size_t index);
 
-				bool create_connection(const size_t node, const size_t index,
-						const std::pair<size_t, size_t> connection);
+			void remove(iterator it);
+
+			void remove(const size_t index);
+
+			size_t add(Node* n);
+
+			void quick_add(Node* n);
+
+			void rerun(
+				const std::unordered_set<size_t> source,
+				const bool skip_first_stage = false
+			);
+
+			template <typename... Ts>
+			void rerun(size_t first, Ts... data)
+			{
+				return rerun(helpers::unordered_set_of(first, data...));
+			}
+
+			void rerun(const std::unordered_set<iterator*> source);
+
+			template <typename... Ts>
+			void rerun(iterator* first, Ts... data)
+			{
+				return rerun(helpers::unordered_set_of(first, data...));
+			}
+
+			void rerun();
+
+			bool would_create_cycle(
+				const size_t node,
+				const std::pair<size_t, size_t> connection
+			) const;
+
+			void force_connection(
+				const size_t node,
+				const size_t index,
+				const std::pair<size_t, size_t> connection
+			);
+
+			bool create_connection(
+				const size_t node,
+				const size_t index,
+				const std::pair<size_t, size_t> connection
+			);
 		};
 	}
 }

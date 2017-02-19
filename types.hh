@@ -6,16 +6,23 @@
 #include <functional>
 
 
-namespace doanimate {
-	namespace types {
-		namespace implementation {
+namespace doanimate
+{
+	namespace types
+	{
+		namespace implementation
+		{
 			class TypeInfo;
 		}
 
+
 		implementation::TypeInfo simplify(const implementation::TypeInfo);
 
-		namespace implementation {
-			enum TypeInfoEnum {
+
+		namespace implementation
+		{
+			enum TypeInfoEnum
+			{
 				boolean,
 				integer,
 				number,
@@ -30,7 +37,8 @@ namespace doanimate {
 			};
 
 
-			class TypeInfo {
+			class TypeInfo
+			{
 				TypeInfoEnum category;
 				TypeInfo* single_extension = nullptr;
 				std::vector<TypeInfo> first_group = {};
@@ -38,60 +46,96 @@ namespace doanimate {
 				size_t generic_index = 0;
 				std::string lbl = "";
 
-				inline TypeInfo(const TypeInfoEnum cat) : category(cat) {
-				}
+				inline TypeInfo(const TypeInfoEnum cat)
+				: category(cat)
+				{}
 
-				inline TypeInfo(const TypeInfoEnum cat, TypeInfo ext)
-					: category(cat), single_extension(new TypeInfo(ext)) {
-				}
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					TypeInfo ext
+				)
+				: category(cat),
+				  single_extension(new TypeInfo(ext))
+				{}
 
-				inline TypeInfo(const TypeInfoEnum cat,
-						std::vector<TypeInfo> group)
-					: category(cat), first_group(group) {
-				}
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					std::vector<TypeInfo> group
+				)
+				: category(cat),
+				  first_group(group)
+				{}
 
-				inline TypeInfo(const TypeInfoEnum cat, TypeInfo ext,
-						std::vector<TypeInfo> group)
-					: category(cat), single_extension(new TypeInfo(ext)),
-					  first_group(group) {
-				}
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					TypeInfo ext,
+					std::vector<TypeInfo> group
+				)
+				: category(cat),
+				  single_extension(new TypeInfo(ext)),
+				  first_group(group)
+				{}
 
-				inline TypeInfo(const TypeInfoEnum cat,
-						std::vector<TypeInfo> first,
-						std::vector<TypeInfo> second)
-					: category(cat), first_group(first), second_group(second) {
-				}
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					std::vector<TypeInfo> first,
+					std::vector<TypeInfo> second
+				)
+				: category(cat),
+				  first_group(first),
+				  second_group(second)
+				{}
 
-				inline TypeInfo(const TypeInfoEnum cat, TypeInfo ext,
-						std::vector<TypeInfo> first,
-						std::vector<TypeInfo> second)
-					: category(cat), single_extension(new TypeInfo(ext)), first_group(first), second_group(second) {
-				}
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					TypeInfo ext,
+					std::vector<TypeInfo> first,
+					std::vector<TypeInfo> second
+				)
+				: category(cat),
+				  single_extension(new TypeInfo(ext)),
+				  first_group(first),
+				  second_group(second)
+				{}
 
 				inline TypeInfo(const size_t index)
-					: category(TypeInfoEnum::generic), generic_index(index) {
-				}
+				: category(TypeInfoEnum::generic),
+				  generic_index(index)
+				{}
 
-				inline TypeInfo(const TypeInfo other, const std::string label)
-					: category(other.category),
-					  single_extension((other.single_extension==nullptr)?nullptr:new TypeInfo(*other.single_extension)),
-					  first_group(other.first_group),
-					  second_group(other.second_group),
-					  generic_index(other.generic_index), lbl(label) {
-				}
+				inline TypeInfo(
+					const TypeInfo other,
+					const std::string label
+				)
+				: category(other.category),
+				  single_extension(
+					(other.single_extension==nullptr)?
+						nullptr:
+						new TypeInfo(*other.single_extension)
+				  ),
+				  first_group(other.first_group),
+				  second_group(other.second_group),
+				  generic_index(other.generic_index),
+				  lbl(label)
+				{}
 
 				public:
-				inline TypeInfo() : TypeInfo(TypeInfoEnum::tuple) {
-				}
+				inline TypeInfo()
+				: TypeInfo(TypeInfoEnum::tuple)
+				{}
 
-				inline TypeInfo(const TypeInfo& other) : TypeInfo(other, other.lbl) {
-				}
+				inline TypeInfo(const TypeInfo& other)
+				: TypeInfo(other, other.lbl)
+				{}
 
-				inline bool operator==(const TypeInfo other) const {
+				inline bool operator==(const TypeInfo other) const
+				{
 					TypeInfo a = simplify(*this);
 					TypeInfo b = simplify(other);
+
 					if (a.category != b.category)
 						return false;
+
 					if (a.single_extension != nullptr)
 						if (b.single_extension != nullptr)
 							if (*a.single_extension != *b.single_extension)
@@ -103,31 +147,42 @@ namespace doanimate {
 					else
 						if (b.single_extension == nullptr)
 							return false;
+
 					if (a.first_group != b.first_group)
 						return false;
+
 					if (a.second_group != b.second_group)
 						return false;
+
 					if (a.generic_index != b.generic_index)
 						return false;
+
 					if (a.lbl != b.lbl)
 						return false;
+
 					return true;
 				}
 
-				inline bool operator!=(const TypeInfo other) const {
+				inline bool operator!=(const TypeInfo other) const
+				{
 					return not (*this == other);
 				}
 
-				inline bool is_equivalent(const TypeInfo other) const {
+				inline bool is_equivalent(const TypeInfo other) const
+				{
 					TypeInfo a = simplify(*this);
 					TypeInfo b = simplify(other);
+
 					if (a.category != b.category)
 						return false;
+
 					if (a.single_extension != nullptr)
 						if (b.single_extension != nullptr)
-							if (not (*a.single_extension).is_equivalent(
-										*b.single_extension
-									))
+							if (
+								not (*a.single_extension).is_equivalent(
+									*b.single_extension
+								)
+							   )
 								return false;
 							else;
 						else
@@ -135,78 +190,102 @@ namespace doanimate {
 					else
 						if (b.single_extension == nullptr)
 							return false;
+
 					if (a.first_group.size() != b.first_group.size())
 						return false;
 					for (size_t i = 0; i < a.first_group.size(); ++i)
-						if (not a.first_group[i].is_equivalent(
-									b.first_group[i]
-								))
+						if (
+							not a.first_group[i].is_equivalent(
+								b.first_group[i]
+						  	 )
+						   )
 							return false;
+
 					if (a.second_group.size() != b.second_group.size())
 						return false;
 					for (size_t i = 0; i < a.second_group.size(); ++i)
-						if (not a.second_group[i].is_equivalent(
-									b.second_group[i]
-								))
+						if (
+							not a.second_group[i].is_equivalent(
+								b.second_group[i]
+							)
+						   )
 							return false;
+
 					if (a.generic_index != b.generic_index)
 						return false;
+
 					return true;
 				}
 
-				inline TypeInfo specialize(const std::vector<TypeInfo> types) const {
+				inline TypeInfo specialize(const std::vector<TypeInfo> types) const
+				{
 					return TypeInfo(TypeInfoEnum::specialize, *this, types);
 				}
 
-				inline TypeInfo labeled(const std::string lbl) const {
+				inline TypeInfo labeled(const std::string lbl) const
+				{
 					return TypeInfo(*this, lbl);
 				}
 
-				inline bool has_label() const {
+				inline bool has_label() const
+				{
 					return lbl != "";
 				}
 
-				inline std::string label() const {
+				inline std::string label() const
+				{
 					return lbl;
 				}
 
-				inline bool is_specialization() const {
+				inline bool is_specialization() const
+				{
 					return category == TypeInfoEnum::specialize;
 				}
 
-				inline TypeInfo specialization_template() const {
+				inline TypeInfo specialization_template() const
+				{
 					return *single_extension;
 				}
 
-				inline std::vector<TypeInfo> specialization_parameters() const {
+				inline std::vector<TypeInfo> specialization_parameters() const
+				{
 					return first_group;
 				}
 
-				inline bool is_list() const {
+				inline bool is_list() const
+				{
 					return category == TypeInfoEnum::list;
 				}
 
-				inline TypeInfo list_of() const {
+				inline TypeInfo list_of() const
+				{
 					return *single_extension;
 				}
 
-				inline bool is_tuple() const {
+				inline bool is_tuple() const
+				{
 					return category == TypeInfoEnum::tuple;
 				}
 
-				inline std::vector<TypeInfo> tuple_types() const {
+				inline std::vector<TypeInfo> tuple_types() const
+				{
 					return first_group;
 				}
 
-				inline bool is_repeated_tuple() const {
+				inline bool is_repeated_tuple() const
+				{
 					if (not is_tuple())
 						return false;
+
 					if (*this == none)
 						return false;
+
 					TypeInfo first;
 					bool is_first;
+
 					for (const auto& i : first_group)
-						if (is_first) {
+						if (is_first)
+						{
 							first = i;
 							is_first = true;
 						}
@@ -216,58 +295,73 @@ namespace doanimate {
 					return true;
 				}
 
-				inline TypeInfo repeated_tuple_of() const {
+				inline TypeInfo repeated_tuple_of() const
+				{
 					return first_group[0];
 				}
 
-				inline size_t repeated_tuple_length() const {
+				inline size_t repeated_tuple_length() const
+				{
 					return first_group.size();
 				}
 
-				inline bool is_generic_parameter() const {
+				inline bool is_generic_parameter() const
+				{
 					return category == TypeInfoEnum::generic;
 				}
 
-				inline size_t generic_parameter_index() const {
+				inline size_t generic_parameter_index() const
+				{
 					return generic_index;
 				}
 
-				inline size_t is_generic() const {
+				inline size_t is_generic() const
+				{
 					if (is_generic_parameter())
 						return true;
+
 					if (single_extension != nullptr)
 						if ((*single_extension).is_generic())
 							return true;
+
 					for (const auto& i : first_group)
 						if (i.is_generic())
 							return true;
+
 					for (const auto& i : second_group)
 						if (i.is_generic())
 							return true;
+
 					return false;
 				}
 
-				inline bool is_function() const {
+				inline bool is_function() const
+				{
 					return category == TypeInfoEnum::function;
 				}
 
-				inline TypeInfo function_return_type() const {
+				inline TypeInfo function_return_type() const
+				{
 					return *single_extension;
 				}
 
-				inline std::vector<TypeInfo> function_arguments() const {
+				inline std::vector<TypeInfo> function_arguments() const
+				{
 					return first_group;
 				}
 
-				inline bool is_code() const {
+				inline bool is_code() const
+				{
 					return category == TypeInfoEnum::code;
 				}
 
-				inline std::vector<TypeInfo> code_inputs() const {
+				inline std::vector<TypeInfo> code_inputs() const
+				{
 					return first_group;
 				}
 
-				inline std::vector<TypeInfo> code_outputs() const {
+				inline std::vector<TypeInfo> code_outputs() const
+				{
 					return second_group;
 				}
 
@@ -277,32 +371,45 @@ namespace doanimate {
 				static const TypeInfo any;
 				static const TypeInfo string;
 
-				static inline TypeInfo list(const TypeInfo of) {
+				static inline TypeInfo list(const TypeInfo of)
+				{
 					return TypeInfo(TypeInfoEnum::list, of);
 				}
 
-				static inline TypeInfo tuple(const TypeInfo of, const size_t times) {
+				static inline TypeInfo tuple(
+					const TypeInfo of,
+					const size_t times
+				)
+				{
 					return TypeInfo(
-							TypeInfoEnum::tuple,
-							std::vector<TypeInfo>(times, of)
-						);
+						TypeInfoEnum::tuple,
+						std::vector<TypeInfo>(times, of)
+					);
 				}
 
-				static inline TypeInfo tuple(const std::vector<TypeInfo> types) {
+				static inline TypeInfo tuple(const std::vector<TypeInfo> types)
+				{
 					return TypeInfo(TypeInfoEnum::tuple, types);
 				}
 
-				static inline TypeInfo generic_parameter(const size_t index) {
+				static inline TypeInfo generic_parameter(const size_t index)
+				{
 					return TypeInfo(index);
 				}
 
-				static inline TypeInfo function(const TypeInfo ret,
-						const std::vector<TypeInfo> args) {
+				static inline TypeInfo function(
+					const TypeInfo ret,
+					const std::vector<TypeInfo> args
+				)
+				{
 					return TypeInfo(TypeInfoEnum::function, ret, args);
 				}
 
-				static inline TypeInfo code(const std::vector<TypeInfo> inputs,
-						const std::vector<TypeInfo> outputs) {
+				static inline TypeInfo code(
+					const std::vector<TypeInfo> inputs,
+					const std::vector<TypeInfo> outputs
+				)
+				{
 					return TypeInfo(TypeInfoEnum::code, inputs, outputs);
 				}
 
@@ -315,7 +422,8 @@ namespace doanimate {
 				static const TypeInfo renderable;
 				static const TypeInfo sound;
 
-				inline ~TypeInfo() {
+				inline ~TypeInfo()
+				{
 					delete single_extension;
 				}
 
@@ -327,57 +435,44 @@ namespace doanimate {
 		using TypeInfo = implementation::TypeInfo;
 
 
-		template <typename T>
-			struct Tuple {
-				std::vector<T> data;
-
-				Tuple(std::vector<T> d) : data(d) {
-				}
-
-				operator std::vector<T>() const {
-					return data;
-				}
-
-				std::vector<T>* operator->() {
-					return &data;
-				}
-
-				std::vector<T> operator*() {
-					return data;
-				}
-			};
-
-
 		using Value = boost::make_recursive_variant<
 			bool,
 			long int,
 			double,
-			std::vector<boost::recursive_variant_>,
-			Tuple<boost::recursive_variant_>,
+			std::vector<boost::recursive_variant_>,  // can hold both lists and tuples.
 			std::string
-				>::type;
+		>::type;
 
 
-		namespace representations {
-			using boolean = bool;
-			using integer = long int;
-			using number = double;
-			using list = std::vector<Value>;
-			using tuple = Tuple<Value>;
-			using string = std::string;
-			using function = std::function<Value(std::vector<Value>)>;
-			using code = std::function<std::vector<Value>(std::vector<Value>)>;
+		namespace representations
+		{
+			using Boolean = bool;
+			using Integer = long int;
+			using Number = double;
+			using List = std::vector<Value>;
+			using Tuple = std::vector<Value>;
+			using String = std::string;
+			using Function = std::function<Value(std::vector<Value>)>;
+			using Code = std::function<std::vector<Value>(std::vector<Value>)>;
 		}
 
 
-		TypeInfo apply_specialization(const TypeInfo, const std::vector<TypeInfo>);
+		TypeInfo apply_specialization(
+			const TypeInfo,
+			const std::vector<TypeInfo>
+		);
+
+
 		std::string to_string(const TypeInfo);
 	}
 }
 
-namespace std {
+
+namespace std
+{
 	template <>
-	struct hash<doanimate::types::TypeInfo> {
+	struct hash<doanimate::types::TypeInfo>
+	{
 		size_t operator()(const doanimate::types::TypeInfo&) const;
 	};
 }
