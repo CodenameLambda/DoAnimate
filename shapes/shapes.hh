@@ -4,10 +4,10 @@
 
 namespace doanimate {
 	namespace shapes {
-		nodes::node* line();
-		nodes::node* polygon();
-		nodes::node* regular_polygon();
-		nodes::node* ellipse();
-		nodes::node* circle();
+		nodes::Node* line();
+		nodes::Node* polygon();
+		nodes::Node* regular_polygon();
+		nodes::Node* ellipse();
+		nodes::Node* circle();
 	}
 }
