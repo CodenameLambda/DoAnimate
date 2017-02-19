@@ -72,16 +72,19 @@ namespace doanimate {
 					: category(TypeInfoEnum::generic), generic_index(index) {
 				}
 
-				inline TypeInfo(const TypeInfo other, const std::string lbl)
+				inline TypeInfo(const TypeInfo other, const std::string label)
 					: category(other.category),
-					  single_extension(other.single_extension),
+					  single_extension((other.single_extension==nullptr)?nullptr:new TypeInfo(*other.single_extension)),
 					  first_group(other.first_group),
 					  second_group(other.second_group),
-					  generic_index(other.generic_index), lbl(lbl) {
+					  generic_index(other.generic_index), lbl(label) {
 				}
 
 				public:
 				inline TypeInfo() : TypeInfo(TypeInfoEnum::tuple) {
+				}
+
+				inline TypeInfo(const TypeInfo& other) : TypeInfo(other, other.lbl) {
 				}
 
 				inline bool operator==(const TypeInfo other) const {
