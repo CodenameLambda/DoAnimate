@@ -5,36 +5,36 @@
 namespace doanimate {
 	namespace types {
 		namespace implementation {
-			const type_info type_info::boolean = type_info_enum::boolean;
-			const type_info type_info::integer = type_info_enum::integer;
-			const type_info type_info::number = type_info_enum::number;
-			const type_info type_info::any = type_info_enum::any;
-			const type_info type_info::string = type_info_enum::string;
-			const type_info type_info::none = type_info::tuple({});
-			const type_info type_info::position = type_info::tuple(type_info::number, 2)
+			const TypeInfo TypeInfo::boolean = TypeInfoEnum::boolean;
+			const TypeInfo TypeInfo::integer = TypeInfoEnum::integer;
+			const TypeInfo TypeInfo::number = TypeInfoEnum::number;
+			const TypeInfo TypeInfo::any = TypeInfoEnum::any;
+			const TypeInfo TypeInfo::string = TypeInfoEnum::string;
+			const TypeInfo TypeInfo::none = TypeInfo::tuple({});
+			const TypeInfo TypeInfo::position = TypeInfo::tuple(TypeInfo::number, 2)
 				.labeled("position");
-			const type_info type_info::position2d = type_info::position;
-			const type_info type_info::position3d = type_info::tuple(type_info::number, 3)
+			const TypeInfo TypeInfo::position2d = TypeInfo::position;
+			const TypeInfo TypeInfo::position3d = TypeInfo::tuple(TypeInfo::number, 3)
 				.labeled("position3d");
-			const type_info type_info::color = type_info::tuple(type_info::number, 4)
+			const TypeInfo TypeInfo::color = TypeInfo::tuple(TypeInfo::number, 4)
 				.labeled("color");
-			const type_info type_info::color_without_alpha = type_info::position3d
+			const TypeInfo TypeInfo::color_without_alpha = TypeInfo::position3d
 				.labeled("color_without_alpha");
-			const type_info type_info::renderable = type_info::function(
-					type_info::color,
-					{type_info::position2d}
+			const TypeInfo TypeInfo::renderable = TypeInfo::function(
+					TypeInfo::color,
+					{TypeInfo::position2d}
 				).labeled("renderable");
-			const type_info type_info::sound = type_info::function(
-					type_info::number,
-					{type_info::number}
+			const TypeInfo TypeInfo::sound = TypeInfo::function(
+					TypeInfo::number,
+					{TypeInfo::number}
 				).labeled("sound");
 		}
 
-		type_info simplify(const type_info t) {
+		TypeInfo simplify(const TypeInfo t) {
 			return apply_specialization(t, {});
 		}
 
-		type_info apply_specialization(const type_info t, const std::vector<type_info> args) {
+		TypeInfo apply_specialization(const TypeInfo t, const std::vector<TypeInfo> args) {
 			if (t.is_code()) {
 				auto ins = t.code_inputs();
 				auto outs = t.code_outputs();
@@ -42,21 +42,21 @@ namespace doanimate {
 					i = apply_specialization(i, args);
 				for (auto& i : outs)
 					i = apply_specialization(i, args);
-				return type_info::code(ins, outs);
+				return TypeInfo::code(ins, outs);
 			}
 			else if (t.is_list())
-				return type_info::list(apply_specialization(t.list_of(), args));
+				return TypeInfo::list(apply_specialization(t.list_of(), args));
 			else if (t.is_tuple()) {
 				auto ts = t.tuple_types();
 				for (auto& i : ts)
 					i = apply_specialization(i, args);
-				return type_info::tuple(ts);
+				return TypeInfo::tuple(ts);
 			}
 			else if (t.is_function()) {
 				auto args2 = t.function_arguments();
 				for (auto& i : args2)
 					i = apply_specialization(i, args);
-				return type_info::function(apply_specialization(t.function_return_type(), args), args2);
+				return TypeInfo::function(apply_specialization(t.function_return_type(), args), args2);
 			}
 			else if (t.is_specialization())
 				return apply_specialization(t.specialization_template(), t.specialization_parameters());
@@ -66,7 +66,7 @@ namespace doanimate {
 				return t;
 		}
 
-		std::string to_string(const std::vector<type_info> ts) {
+		std::string to_string(const std::vector<TypeInfo> ts) {
 			bool first = true;
 			std::string out = "[";
 			for (const auto& i : ts) {
@@ -79,15 +79,15 @@ namespace doanimate {
 			return out + "]";
 		}
 
-		const std::unordered_map<type_info, std::string> names {
-			{type_info::boolean, "boolean"},
-			{type_info::integer, "integer"},
-			{type_info::number, "number"},
-			{type_info::string, "string"},
-			{type_info::any, "any"}
+		const std::unordered_map<TypeInfo, std::string> names {
+			{TypeInfo::boolean, "boolean"},
+			{TypeInfo::integer, "integer"},
+			{TypeInfo::number, "number"},
+			{TypeInfo::string, "string"},
+			{TypeInfo::any, "any"}
 		};
 
-		std::string to_string(const type_info t) {
+		std::string to_string(const TypeInfo t) {
 			if (t.has_label())
 				return t.label();
 			else if (t.is_code())
@@ -122,18 +122,18 @@ size_t combine_hashes(std::vector<size_t> hashes) {
 	return out;
 }
 
-using da_type_info = doanimate::types::type_info;
+using TypeInfo = doanimate::types::TypeInfo;
 
-const std::unordered_map<da_type_info, size_t> hashes {
-	{da_type_info::boolean, 1},
-	{da_type_info::integer, 3},
-	{da_type_info::number, 5},
-	{da_type_info::string, 7},
-	{da_type_info::any, 9}
+const std::unordered_map<TypeInfo, size_t> hashes {
+	{TypeInfo::boolean, 1},
+	{TypeInfo::integer, 3},
+	{TypeInfo::number, 5},
+	{TypeInfo::string, 7},
+	{TypeInfo::any, 9}
 };
 
 namespace std {
-	size_t hash<da_type_info>::operator()(const da_type_info& t) const {
+	size_t hash<TypeInfo>::operator()(const TypeInfo& t) const {
 		auto it = hashes.find(t);
 		if (it == hashes.end()) {
 			std::vector<size_t> out{
