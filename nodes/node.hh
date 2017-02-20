@@ -16,8 +16,7 @@ namespace doanimate
 
 			Node(const bool has_ui_operations)
 			: has_ui_operations(has_ui_operations)
-			{
-			}
+			{}
 
 			virtual void update() = 0;
 
