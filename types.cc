@@ -897,22 +897,21 @@ size_t combine_hashes(std::vector<size_t>& hashes)
 using TypeInfo = doanimate::types::TypeInfo;
 
 
-const std::unordered_map<TypeInfo, size_t> hashes {
-	{TypeInfo::boolean, 1},
-	{TypeInfo::integer, 3},
-	{TypeInfo::number, 5},
-	{TypeInfo::string, 7},
-	{TypeInfo::any, 9}
-};
-
-
 namespace std
 {
 	size_t hash<TypeInfo>::operator()(const TypeInfo& t) const
 	{
-		auto it = hashes.find(t);
-
-		if (it == hashes.end())
+		if (t == TypeInfo::boolean)
+			return 1;
+		else if (t == TypeInfo::integer)
+			return 3;
+		else if (t == TypeInfo::number)
+			return 5;
+		else if (t == TypeInfo::string)
+			return 7;
+		else if (t == TypeInfo::any)
+			return 9;
+		else
 		{
 			std::vector<size_t> out {
 				size_t(t.category),
@@ -931,7 +930,5 @@ namespace std
 
 			return combine_hashes(out);
 		}
-		else
-			return it->second;
 	}
 }
