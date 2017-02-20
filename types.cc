@@ -53,15 +53,15 @@ namespace doanimate
 		}
 
 
-		TypeInfo simplify(const TypeInfo t)
+		TypeInfo simplify(const TypeInfo& t)
 		{
 			return apply_specialization(t, {});
 		}
 
 
 		TypeInfo apply_specialization(
-			const TypeInfo t,
-			const std::vector<TypeInfo> args
+			const TypeInfo& t,
+			const std::vector<TypeInfo>& args
 		)
 		{
 			if (t.is_code())
@@ -106,7 +106,7 @@ namespace doanimate
 		}
 
 
-		std::string to_string(const std::vector<TypeInfo> ts)
+		std::string to_string(const std::vector<TypeInfo>& ts)
 		{
 			bool first = true;
 			std::string out = "[";
@@ -133,7 +133,7 @@ namespace doanimate
 		};
 
 
-		std::string to_string(const TypeInfo t)
+		std::string to_string(const TypeInfo& t)
 		{
 			if (t.has_label())
 				return t.label();
@@ -163,7 +163,7 @@ namespace doanimate
 }
 
 
-size_t combine_hashes(std::vector<size_t> hashes)
+size_t combine_hashes(std::vector<size_t>& hashes)
 {
 	size_t out = 0;
 

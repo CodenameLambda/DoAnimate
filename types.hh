@@ -16,7 +16,7 @@ namespace doanimate
 		}
 
 
-		implementation::TypeInfo simplify(const implementation::TypeInfo);
+		implementation::TypeInfo simplify(const implementation::TypeInfo&);
 
 
 		namespace implementation
@@ -52,7 +52,7 @@ namespace doanimate
 
 				inline TypeInfo(
 					const TypeInfoEnum cat,
-					TypeInfo ext
+					const TypeInfo& ext
 				)
 				: category(cat),
 				  single_extension(new TypeInfo(ext))
@@ -60,7 +60,15 @@ namespace doanimate
 
 				inline TypeInfo(
 					const TypeInfoEnum cat,
-					std::vector<TypeInfo> group
+					TypeInfo&& ext
+				)
+				: category(cat),
+				  single_extension(new TypeInfo(ext))
+				{}
+
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					const std::vector<TypeInfo>& group
 				)
 				: category(cat),
 				  first_group(group)
@@ -68,8 +76,16 @@ namespace doanimate
 
 				inline TypeInfo(
 					const TypeInfoEnum cat,
-					TypeInfo ext,
-					std::vector<TypeInfo> group
+					std::vector<TypeInfo>&& group
+				)
+				: category(cat),
+				  first_group(group)
+				{}
+
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					const TypeInfo& ext,
+					const std::vector<TypeInfo>& group
 				)
 				: category(cat),
 				  single_extension(new TypeInfo(ext)),
@@ -78,8 +94,38 @@ namespace doanimate
 
 				inline TypeInfo(
 					const TypeInfoEnum cat,
-					std::vector<TypeInfo> first,
-					std::vector<TypeInfo> second
+					TypeInfo&& ext,
+					const std::vector<TypeInfo>& group
+				)
+				: category(cat),
+				  single_extension(new TypeInfo(ext)),
+				  first_group(group)
+				{}
+
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					const TypeInfo& ext,
+					std::vector<TypeInfo>&& group
+				)
+				: category(cat),
+				  single_extension(new TypeInfo(ext)),
+				  first_group(group)
+				{}
+
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					TypeInfo&& ext,
+					std::vector<TypeInfo>&& group
+				)
+				: category(cat),
+				  single_extension(new TypeInfo(ext)),
+				  first_group(group)
+				{}
+
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					const std::vector<TypeInfo>& first,
+					const std::vector<TypeInfo>& second
 				)
 				: category(cat),
 				  first_group(first),
@@ -88,9 +134,123 @@ namespace doanimate
 
 				inline TypeInfo(
 					const TypeInfoEnum cat,
-					TypeInfo ext,
-					std::vector<TypeInfo> first,
-					std::vector<TypeInfo> second
+					std::vector<TypeInfo>&& first,
+					const std::vector<TypeInfo>& second
+				)
+				: category(cat),
+				  first_group(first),
+				  second_group(second)
+				{}
+
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					const std::vector<TypeInfo>& first,
+					std::vector<TypeInfo>&& second
+				)
+				: category(cat),
+				  first_group(first),
+				  second_group(second)
+				{}
+
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					std::vector<TypeInfo>&& first,
+					std::vector<TypeInfo>&& second
+				)
+				: category(cat),
+				  first_group(first),
+				  second_group(second)
+				{}
+
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					const TypeInfo& ext,
+					const std::vector<TypeInfo>& first,
+					const std::vector<TypeInfo>& second
+				)
+				: category(cat),
+				  single_extension(new TypeInfo(ext)),
+				  first_group(first),
+				  second_group(second)
+				{}
+
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					TypeInfo&& ext,
+					const std::vector<TypeInfo>& first,
+					const std::vector<TypeInfo>& second
+				)
+				: category(cat),
+				  single_extension(new TypeInfo(ext)),
+				  first_group(first),
+				  second_group(second)
+				{}
+
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					const TypeInfo& ext,
+					std::vector<TypeInfo>&& first,
+					const std::vector<TypeInfo>& second
+				)
+				: category(cat),
+				  single_extension(new TypeInfo(ext)),
+				  first_group(first),
+				  second_group(second)
+				{}
+
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					TypeInfo&& ext,
+					std::vector<TypeInfo>&& first,
+					const std::vector<TypeInfo>& second
+				)
+				: category(cat),
+				  single_extension(new TypeInfo(ext)),
+				  first_group(first),
+				  second_group(second)
+				{}
+
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					const TypeInfo& ext,
+					const std::vector<TypeInfo>& first,
+					std::vector<TypeInfo>&& second
+				)
+				: category(cat),
+				  single_extension(new TypeInfo(ext)),
+				  first_group(first),
+				  second_group(second)
+				{}
+
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					TypeInfo&& ext,
+					const std::vector<TypeInfo>& first,
+					std::vector<TypeInfo>&& second
+				)
+				: category(cat),
+				  single_extension(new TypeInfo(ext)),
+				  first_group(first),
+				  second_group(second)
+				{}
+
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					const TypeInfo& ext,
+					std::vector<TypeInfo>&& first,
+					std::vector<TypeInfo>&& second
+				)
+				: category(cat),
+				  single_extension(new TypeInfo(ext)),
+				  first_group(first),
+				  second_group(second)
+				{}
+
+				inline TypeInfo(
+					const TypeInfoEnum cat,
+					TypeInfo&& ext,
+					std::vector<TypeInfo>&& first,
+					std::vector<TypeInfo>&& second
 				)
 				: category(cat),
 				  single_extension(new TypeInfo(ext)),
@@ -104,8 +264,8 @@ namespace doanimate
 				{}
 
 				inline TypeInfo(
-					const TypeInfo other,
-					const std::string label
+					const TypeInfo& other,
+					const std::string& label
 				)
 				: category(other.category),
 				  single_extension(
@@ -119,6 +279,46 @@ namespace doanimate
 				  lbl(label)
 				{}
 
+				inline TypeInfo(
+					TypeInfo&& other,
+					const std::string& label
+				)
+				: category(other.category),
+				  single_extension(other.single_extension),
+				  first_group(std::move(other.first_group)),
+				  second_group(std::move(other.second_group)),
+				  generic_index(other.generic_index),
+				  lbl(label)
+				{}
+
+				inline TypeInfo(
+					const TypeInfo& other,
+					std::string&& label
+				)
+				: category(other.category),
+				  single_extension(
+					(other.single_extension==nullptr)?
+						nullptr:
+						new TypeInfo(*other.single_extension)
+				  ),
+				  first_group(other.first_group),
+				  second_group(other.second_group),
+				  generic_index(other.generic_index),
+				  lbl(label)
+				{}
+
+				inline TypeInfo(
+					TypeInfo&& other,
+					std::string&& label
+				)
+				: category(other.category),
+				  single_extension(other.single_extension),
+				  first_group(std::move(other.first_group)),
+				  second_group(std::move(other.second_group)),
+				  generic_index(other.generic_index),
+				  lbl(label)
+				{}
+
 				public:
 				inline TypeInfo()
 				: TypeInfo(TypeInfoEnum::tuple)
@@ -128,7 +328,45 @@ namespace doanimate
 				: TypeInfo(other, other.lbl)
 				{}
 
-				inline bool operator==(const TypeInfo other) const
+				inline TypeInfo(TypeInfo&& other)
+				: TypeInfo(other, std::move(other.lbl))
+				{}
+
+				inline TypeInfo& operator=(const TypeInfo& other)
+				{
+					category = other.category;
+
+					delete single_extension;
+					if (other.single_extension == nullptr)
+						single_extension = nullptr;
+					else
+						single_extension = new TypeInfo(*other.single_extension);
+
+					first_group = other.first_group;
+					second_group = other.second_group;
+					generic_index = other.generic_index;
+					lbl = other.lbl;
+
+					return *this;
+				}
+
+				inline TypeInfo& operator=(TypeInfo&& other)
+				{
+					category = other.category;
+
+					delete single_extension;
+					single_extension = other.single_extension;
+					other.single_extension = nullptr;
+
+					first_group = std::move(other.first_group);
+					second_group = std::move(other.second_group);
+					generic_index = other.generic_index;
+					lbl = std::move(other.lbl);
+
+					return *this;
+				}
+
+				inline bool operator==(const TypeInfo& other) const
 				{
 					TypeInfo a = simplify(*this);
 					TypeInfo b = simplify(other);
@@ -163,12 +401,12 @@ namespace doanimate
 					return true;
 				}
 
-				inline bool operator!=(const TypeInfo other) const
+				inline bool operator!=(const TypeInfo& other) const
 				{
 					return not (*this == other);
 				}
 
-				inline bool is_equivalent(const TypeInfo other) const
+				inline bool is_equivalent(const TypeInfo& other) const
 				{
 					TypeInfo a = simplify(*this);
 					TypeInfo b = simplify(other);
@@ -217,12 +455,22 @@ namespace doanimate
 					return true;
 				}
 
-				inline TypeInfo specialize(const std::vector<TypeInfo> types) const
+				inline TypeInfo specialize(const std::vector<TypeInfo>& types) const
 				{
 					return TypeInfo(TypeInfoEnum::specialize, *this, types);
 				}
 
-				inline TypeInfo labeled(const std::string lbl) const
+				inline TypeInfo specialize(std::vector<TypeInfo>&& types) const
+				{
+					return TypeInfo(TypeInfoEnum::specialize, *this, types);
+				}
+
+				inline TypeInfo labeled(const std::string& lbl) const
+				{
+					return TypeInfo(*this, lbl);
+				}
+
+				inline TypeInfo labeled(std::string&& lbl) const
 				{
 					return TypeInfo(*this, lbl);
 				}
@@ -232,7 +480,7 @@ namespace doanimate
 					return lbl != "";
 				}
 
-				inline std::string label() const
+				inline const std::string& label() const
 				{
 					return lbl;
 				}
@@ -242,12 +490,12 @@ namespace doanimate
 					return category == TypeInfoEnum::specialize;
 				}
 
-				inline TypeInfo specialization_template() const
+				inline const TypeInfo& specialization_template() const
 				{
 					return *single_extension;
 				}
 
-				inline std::vector<TypeInfo> specialization_parameters() const
+				inline const std::vector<TypeInfo>& specialization_parameters() const
 				{
 					return first_group;
 				}
@@ -257,7 +505,7 @@ namespace doanimate
 					return category == TypeInfoEnum::list;
 				}
 
-				inline TypeInfo list_of() const
+				inline const TypeInfo& list_of() const
 				{
 					return *single_extension;
 				}
@@ -267,7 +515,7 @@ namespace doanimate
 					return category == TypeInfoEnum::tuple;
 				}
 
-				inline std::vector<TypeInfo> tuple_types() const
+				inline const std::vector<TypeInfo>& tuple_types() const
 				{
 					return first_group;
 				}
@@ -277,7 +525,7 @@ namespace doanimate
 					if (not is_tuple())
 						return false;
 
-					if (*this == none)
+					if (*this == TypeInfo::none)
 						return false;
 
 					TypeInfo first;
@@ -295,7 +543,7 @@ namespace doanimate
 					return true;
 				}
 
-				inline TypeInfo repeated_tuple_of() const
+				inline const TypeInfo& repeated_tuple_of() const
 				{
 					return first_group[0];
 				}
@@ -340,12 +588,12 @@ namespace doanimate
 					return category == TypeInfoEnum::function;
 				}
 
-				inline TypeInfo function_return_type() const
+				inline const TypeInfo& function_return_type() const
 				{
 					return *single_extension;
 				}
 
-				inline std::vector<TypeInfo> function_arguments() const
+				inline const std::vector<TypeInfo>& function_arguments() const
 				{
 					return first_group;
 				}
@@ -355,12 +603,12 @@ namespace doanimate
 					return category == TypeInfoEnum::code;
 				}
 
-				inline std::vector<TypeInfo> code_inputs() const
+				inline const std::vector<TypeInfo>& code_inputs() const
 				{
 					return first_group;
 				}
 
-				inline std::vector<TypeInfo> code_outputs() const
+				inline const std::vector<TypeInfo>& code_outputs() const
 				{
 					return second_group;
 				}
@@ -371,13 +619,18 @@ namespace doanimate
 				static const TypeInfo any;
 				static const TypeInfo string;
 
-				static inline TypeInfo list(const TypeInfo of)
+				static inline TypeInfo list(const TypeInfo& of)
+				{
+					return TypeInfo(TypeInfoEnum::list, of);
+				}
+
+				static inline TypeInfo list(TypeInfo&& of)
 				{
 					return TypeInfo(TypeInfoEnum::list, of);
 				}
 
 				static inline TypeInfo tuple(
-					const TypeInfo of,
+					const TypeInfo& of,
 					const size_t times
 				)
 				{
@@ -387,7 +640,23 @@ namespace doanimate
 					);
 				}
 
-				static inline TypeInfo tuple(const std::vector<TypeInfo> types)
+				static inline TypeInfo tuple(
+					TypeInfo&& of,
+					const size_t times
+				)
+				{
+					return TypeInfo(
+						TypeInfoEnum::tuple,
+						std::vector<TypeInfo>(times, of)
+					);
+				}
+
+				static inline TypeInfo tuple(const std::vector<TypeInfo>& types)
+				{
+					return TypeInfo(TypeInfoEnum::tuple, types);
+				}
+
+				static inline TypeInfo tuple(std::vector<TypeInfo>&& types)
 				{
 					return TypeInfo(TypeInfoEnum::tuple, types);
 				}
@@ -398,16 +667,64 @@ namespace doanimate
 				}
 
 				static inline TypeInfo function(
-					const TypeInfo ret,
-					const std::vector<TypeInfo> args
+					const TypeInfo& ret,
+					const std::vector<TypeInfo>& args
+				)
+				{
+					return TypeInfo(TypeInfoEnum::function, ret, args);
+				}
+
+				static inline TypeInfo function(
+					TypeInfo&& ret,
+					const std::vector<TypeInfo>& args
+				)
+				{
+					return TypeInfo(TypeInfoEnum::function, ret, args);
+				}
+
+				static inline TypeInfo function(
+					const TypeInfo& ret,
+					std::vector<TypeInfo>&& args
+				)
+				{
+					return TypeInfo(TypeInfoEnum::function, ret, args);
+				}
+
+				static inline TypeInfo function(
+					TypeInfo&& ret,
+					std::vector<TypeInfo>&& args
 				)
 				{
 					return TypeInfo(TypeInfoEnum::function, ret, args);
 				}
 
 				static inline TypeInfo code(
-					const std::vector<TypeInfo> inputs,
-					const std::vector<TypeInfo> outputs
+					const std::vector<TypeInfo>& inputs,
+					const std::vector<TypeInfo>& outputs
+				)
+				{
+					return TypeInfo(TypeInfoEnum::code, inputs, outputs);
+				}
+
+				static inline TypeInfo code(
+					std::vector<TypeInfo>&& inputs,
+					const std::vector<TypeInfo>& outputs
+				)
+				{
+					return TypeInfo(TypeInfoEnum::code, inputs, outputs);
+				}
+
+				static inline TypeInfo code(
+					const std::vector<TypeInfo>& inputs,
+					std::vector<TypeInfo>&& outputs
+				)
+				{
+					return TypeInfo(TypeInfoEnum::code, inputs, outputs);
+				}
+
+				static inline TypeInfo code(
+					std::vector<TypeInfo>&& inputs,
+					std::vector<TypeInfo>&& outputs
 				)
 				{
 					return TypeInfo(TypeInfoEnum::code, inputs, outputs);
@@ -458,12 +775,12 @@ namespace doanimate
 
 
 		TypeInfo apply_specialization(
-			const TypeInfo,
-			const std::vector<TypeInfo>
+			const TypeInfo&,
+			const std::vector<TypeInfo>&
 		);
 
 
-		std::string to_string(const TypeInfo);
+		std::string to_string(const TypeInfo&);
 	}
 }
 
