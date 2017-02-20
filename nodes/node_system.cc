@@ -5,6 +5,12 @@ namespace doanimate
 {
 	namespace nodes
 	{
+		NodeWrapper::NodeWrapper(Node* n)
+		{
+			this->n = n;
+			input_links = decltype(input_links)(n->get_inputs().size(), {-1, 0});
+		}
+
 		NodeSystem::iterator NodeSystem::begin()
 		{
 			return iterator(nodes.begin(), nodes.end());

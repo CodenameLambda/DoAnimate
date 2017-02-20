@@ -18,10 +18,7 @@ namespace doanimate
 			Node* n;
 			std::vector<std::pair<size_t, size_t>> input_links;
 
-			inline NodeWrapper(Node* n)
-			: n(n),
-			  input_links(n->get_inputs().size(), {-1, 0})
-			{}
+			NodeWrapper(Node*);
 		};
 
 
@@ -43,10 +40,11 @@ namespace doanimate
 					T begin,
 					T end
 				)
-				: begin(begin),
-				  current(begin),
-				  end(end)
 				{
+					this->begin = begin;
+					this->current = begin;
+					this->end = end;
+
 					while (*current == boost::none and current != end)
 						++ current;
 				}
