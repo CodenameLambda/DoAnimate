@@ -15,7 +15,7 @@ namespace helpers
 		template <typename T, typename... Ts>
 		void fill_set(
 			std::unordered_set<T>& set,
-			T current,
+			T& current,
 			Ts... next
 		)
 		{
@@ -33,7 +33,7 @@ namespace helpers
 		template <typename T, typename... Ts>
 		void fill_vector(
 			std::vector<T>& vec,
-			T current,
+			T& current,
 			Ts... next
 		)
 		{
