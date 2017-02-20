@@ -113,7 +113,7 @@ namespace doanimate
 			void quick_add(Node* n);
 
 			void rerun(
-				const std::unordered_set<size_t> source,
+				const std::unordered_set<size_t>& source,
 				const bool skip_first_stage = false
 			);
 
@@ -123,7 +123,7 @@ namespace doanimate
 				return rerun(helpers::unordered_set_of(first, data...));
 			}
 
-			void rerun(const std::unordered_set<iterator*> source);
+			void rerun(const std::unordered_set<iterator*>& source);
 
 			template <typename... Ts>
 			void rerun(iterator* first, Ts... data)

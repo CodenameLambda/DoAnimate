@@ -74,7 +74,7 @@ namespace doanimate
 		}
 
 		void NodeSystem::rerun(
-			const std::unordered_set<size_t> source,
+			const std::unordered_set<size_t>& source,
 			const bool skip_first_stage
 		)
 		{
@@ -181,7 +181,7 @@ namespace doanimate
 			}
 		}
 
-		void NodeSystem::rerun(const std::unordered_set<NodeSystem::iterator*> source)
+		void NodeSystem::rerun(const std::unordered_set<NodeSystem::iterator*>& source)
 		{
 			std::unordered_set<size_t> out(source.bucket_count());
 
