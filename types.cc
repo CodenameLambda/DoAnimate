@@ -50,6 +50,18 @@ namespace doanimate
 				TypeInfo::number,
 				{TypeInfo::number}
 			).labeled("sound");
+
+			const TypeInfo TypeInfo::interactable = TypeInfo::function(
+				TypeInfo::tuple({
+					TypeInfo::boolean,
+					TypeInfo::function(  // drag
+						TypeInfo::list(TypeInfo::any),
+						{TypeInfo::position}
+					),
+					TypeInfo::renderable  // hover
+				}),
+				{TypeInfo::position}
+			).labeled("interactable");
 		}
 
 

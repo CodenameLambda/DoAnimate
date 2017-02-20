@@ -421,6 +421,7 @@ namespace doanimate
 				static const TypeInfo color_without_alpha;
 				static const TypeInfo renderable;
 				static const TypeInfo sound;
+				static const TypeInfo interactable;
 
 				inline ~TypeInfo()
 				{
