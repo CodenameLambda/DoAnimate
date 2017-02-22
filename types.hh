@@ -1,6 +1,7 @@
 #ifndef	types_h
 #define types_h
 #include <boost/variant.hpp>
+#include <boost/function.hpp>
 #include <vector>
 #include <string>
 #include <functional>
@@ -441,7 +442,9 @@ namespace doanimate
 			long int,
 			double,
 			std::vector<boost::recursive_variant_>,  // can hold both lists and tuples.
-			std::string
+			std::string,
+			boost::function1<boost::recursive_variant_, std::vector<boost::recursive_variant_>>,
+			boost::function1<std::vector<boost::recursive_variant_>, std::vector<boost::recursive_variant_>>
 		>::type;
 
 
@@ -453,8 +456,8 @@ namespace doanimate
 			using List = std::vector<Value>;
 			using Tuple = std::vector<Value>;
 			using String = std::string;
-			using Function = std::function<Value(std::vector<Value>)>;
-			using Code = std::function<std::vector<Value>(std::vector<Value>)>;
+			using Function = boost::function1<Value, std::vector<Value>>;
+			using Code = boost::function1<std::vector<Value>, std::vector<Value>>;
 		}
 
 
