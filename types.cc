@@ -868,7 +868,8 @@ namespace doanimate
 			{TypeInfo::integer, "integer"},
 			{TypeInfo::number, "number"},
 			{TypeInfo::string, "string"},
-			{TypeInfo::any, "any"}
+			{TypeInfo::any, "any"},
+			{TypeInfo::none, "none"}
 		};
 
 
@@ -895,6 +896,8 @@ namespace doanimate
 			else if (t.is_generic_parameter())
 				return "template_parameter[" +
 					std::to_string(t.generic_parameter_index()) + "]";
+			else if (t.is_union())
+				return "union[" + to_string(t.union_options()) + "]";
 			else
 				return names.find(t)->second;
 		}
@@ -930,6 +933,8 @@ namespace std
 			return 7;
 		else if (t == TypeInfo::any)
 			return 9;
+		else if (t == TypeInfo::none)
+			return 11;
 		else
 		{
 			std::vector<size_t> out {
