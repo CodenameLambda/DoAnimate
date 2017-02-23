@@ -8,11 +8,12 @@ namespace doanimate
 {
 	class Manager
 	{
-		nodes::NodeSystem* system;
 		std::vector<size_t> inputs;
 		std::vector<size_t> outputs;
 
 		public:
+		nodes::NodeSystem* system;
+
 		float frames_per_second;
 		size_t width;
 		size_t height;
