@@ -18,10 +18,7 @@ namespace doanimate
 			Node* n;
 			std::vector<std::pair<size_t, size_t>> input_links;
 
-			inline NodeWrapper(Node* n)
-			: n(n),
-			  input_links(n->get_inputs().size(), {-1, 0})
-			{}
+			NodeWrapper(Node*);
 		};
 
 
@@ -43,10 +40,11 @@ namespace doanimate
 					T begin,
 					T end
 				)
-				: begin(begin),
-				  current(begin),
-				  end(end)
 				{
+					this->begin = begin;
+					this->current = begin;
+					this->end = end;
+
 					while (*current == boost::none and current != end)
 						++ current;
 				}
@@ -113,7 +111,7 @@ namespace doanimate
 			void quick_add(Node* n);
 
 			void rerun(
-				const std::unordered_set<size_t> source,
+				const std::unordered_set<size_t>& source,
 				const bool skip_first_stage = false
 			);
 
@@ -123,7 +121,7 @@ namespace doanimate
 				return rerun(helpers::unordered_set_of(first, data...));
 			}
 
-			void rerun(const std::unordered_set<iterator*> source);
+			void rerun(const std::unordered_set<iterator*>& source);
 
 			template <typename... Ts>
 			void rerun(iterator* first, Ts... data)
