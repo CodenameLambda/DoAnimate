@@ -1,5 +1,5 @@
-#ifndef Nodes_Node_h
-#define Nodes_Node_h
+#ifndef nodes_node_hh
+#define nodes_node_hh
 #include <functional>
 #include <vector>
 #include "../types.hh"
@@ -12,11 +12,9 @@ namespace doanimate
 		class Node
 		{
 			public:
-			const bool has_ui_operations;
+			bool has_ui_operations;
 
-			Node(const bool has_ui_operations)
-			: has_ui_operations(has_ui_operations)
-			{}
+			Node(const bool has_ui_operations);
 
 			virtual void update() = 0;
 
@@ -32,8 +30,11 @@ namespace doanimate
 
 			virtual const std::vector<std::string>& get_output_names() = 0;
 
-			virtual void run_ui_operations()
-			{}
+			virtual void run_ui_operations();
+
+			virtual bool has_requesting();
+
+			virtual std::vector<size_t> requester(std::vector<bool> already_loaded);
 		};
 
 		
@@ -46,13 +47,13 @@ namespace doanimate
 
 			imp_t implementation;
 
-			const std::vector<types::TypeInfo> input_type_infos;
+			std::vector<types::TypeInfo> input_type_infos;
 
-			const std::vector<std::string> input_names;
+			std::vector<std::string> input_names;
 
-			const std::vector<types::TypeInfo> output_type_infos;
+			std::vector<types::TypeInfo> output_type_infos;
 
-			const std::vector<std::string> output_names;
+			std::vector<std::string> output_names;
 
 			std::vector<types::Value> inputs;
 
@@ -61,37 +62,12 @@ namespace doanimate
 			public:
 			DefaultNode(
 				imp_t implementation,
-				decltype(input_type_infos) input_type_infos,
-				decltype(input_names) input_names,
-				decltype(output_type_infos) output_type_infos,
-				decltype(output_names) output_names,
-				decltype(inputs) default_inputs
-			)
-			: Node(false),
-			  implementation(implementation),
-			  input_type_infos(input_type_infos),
-			  input_names(input_names),
-			  output_type_infos(output_type_infos),
-			  output_names(output_names),
-			  inputs(default_inputs)
-			{}
-
-			DefaultNode(
-				decltype(implementation) implementation,
-				decltype(input_type_infos) input_type_infos,
-				decltype(input_names) input_names,
-				decltype(output_type_infos) output_type_infos,
-				decltype(output_names) output_names
-			)
-			: DefaultNode(
-				implementation,
-				input_type_infos,
-				input_names,
-				output_type_infos,
-				output_names,
-				decltype(inputs)(input_type_infos.size(), false)
-			)
-			{}
+				const std::vector<types::TypeInfo>& input_type_infos,
+				const std::vector<std::string>& input_names,
+				const std::vector<types::TypeInfo>& output_type_infos,
+				const std::vector<std::string>& output_names,
+				const std::vector<types::Value>& default_inputs = {}
+			);
 
 			virtual void update();
 

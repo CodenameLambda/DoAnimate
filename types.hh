@@ -1,5 +1,5 @@
-#ifndef	types_h
-#define types_h
+#ifndef	types_hh
+#define types_hh
 #include <boost/variant.hpp>
 #include <vector>
 #include <string>

@@ -1,3 +1,5 @@
+#ifndef helpers_variadic_hh
+#define helpers_variadic_hh
 #include <vector>
 #include <unordered_set>
 
@@ -66,3 +68,4 @@ namespace helpers
 		return out;
 	}
 }
+#endif
