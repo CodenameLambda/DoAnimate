@@ -605,6 +605,16 @@ namespace doanimate
 				return second_group;
 			}
 
+			bool TypeInfo::is_union() const
+			{
+				return category == TypeInfoEnum::type_union;
+			}
+
+			const std::vector<TypeInfo>& TypeInfo::union_options() const
+			{
+				return first_group;
+			}
+
 			const TypeInfo TypeInfo::boolean = TypeInfoEnum::boolean;
 
 			const TypeInfo TypeInfo::integer = TypeInfoEnum::integer;
@@ -724,6 +734,16 @@ namespace doanimate
 			)
 			{
 				return TypeInfo(TypeInfoEnum::code, inputs, outputs);
+			}
+
+			TypeInfo TypeInfo::type_union(const std::vector<TypeInfo>& options)
+			{
+				return TypeInfo(TypeInfoEnum::type_union, options);
+			}
+
+			TypeInfo TypeInfo::type_union(std::vector<TypeInfo>&& options)
+			{
+				return TypeInfo(TypeInfoEnum::type_union, options);
 			}
 
 			const TypeInfo TypeInfo::none = TypeInfoEnum::none;

@@ -34,7 +34,8 @@ namespace doanimate
 				specialize,
 				any,
 				string,
-				none
+				none,
+				type_union
 			};
 
 
@@ -262,6 +263,10 @@ namespace doanimate
 
 				const std::vector<TypeInfo>& code_outputs() const;
 
+				bool is_union() const;
+
+				const std::vector<TypeInfo>& union_options() const;
+
 				static const TypeInfo boolean;
 				static const TypeInfo integer;
 				static const TypeInfo number;
@@ -327,6 +332,10 @@ namespace doanimate
 					std::vector<TypeInfo>&& inputs,
 					std::vector<TypeInfo>&& outputs
 				);
+
+				static TypeInfo type_union(const std::vector<TypeInfo>& opts);
+
+				static TypeInfo type_union(std::vector<TypeInfo>&& options);
 
 				static const TypeInfo none;
 				static const TypeInfo position;
