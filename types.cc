@@ -313,8 +313,7 @@ namespace doanimate
 
 			TypeInfo::TypeInfo()
 			{
-				category = TypeInfoEnum::tuple;
-				lbl = "none";
+				category = TypeInfoEnum::none;
 			}
 
 			TypeInfo::TypeInfo(const TypeInfo& other)
@@ -518,7 +517,7 @@ namespace doanimate
 				if (not is_tuple())
 					return false;
 
-				if (*this == TypeInfo::none)
+				if (first_group.size() == 0)
 					return false;
 
 				TypeInfo first;
@@ -727,7 +726,7 @@ namespace doanimate
 				return TypeInfo(TypeInfoEnum::code, inputs, outputs);
 			}
 
-			const TypeInfo TypeInfo::none = TypeInfo::tuple({}).labeled("none");
+			const TypeInfo TypeInfo::none = TypeInfoEnum::none;
 
 			const TypeInfo TypeInfo::position = TypeInfo::tuple(
 				TypeInfo::number,

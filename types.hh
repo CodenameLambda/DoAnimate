@@ -33,7 +33,8 @@ namespace doanimate
 				code,
 				specialize,
 				any,
-				string
+				string,
+				none
 			};
 
 
