@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <functional>
+#include "helpers/variadic.hh"
 
 
 namespace doanimate
@@ -352,21 +353,151 @@ namespace doanimate
 
 				friend struct std::hash<TypeInfo>;
 			};
+
+			template <typename T>
+			T get_none();
+
+			template <typename T>
+			class function_type
+			{
+				std::function<T(std::vector<T>)> implementation;
+				TypeInfo return_type;
+				std::vector<TypeInfo> arg_types;
+
+				public:
+				function_type(
+					std::function<T(std::vector<T>)> imp,
+					const TypeInfo& output,
+					const std::vector<TypeInfo>& inputs
+				)
+				{
+					implementation = imp;
+					return_type = output;
+					arg_types = inputs;
+				}
+
+				function_type(
+					std::function<void(std::vector<T>)> imp,
+					const std::vector<TypeInfo>& inputs
+				)
+				{
+					implementation = [=](std::vector<T> args)
+						         {
+								 imp(args);
+								 return get_none<T>();
+							 };
+					return_type = TypeInfo::none;
+					arg_types = inputs;
+				}
+
+				function_type(
+					std::function<T(std::vector<T>)> imp,
+					const TypeInfo& of_type
+				)
+				{
+					implementation = imp;
+					return_type = of_type.function_return_type();
+					arg_types = of_type.function_arguments();
+				}
+
+				T operator()(std::vector<T> args)
+				{
+					return implementation(args);
+				}
+
+				template <typename... Ts>
+				T operator()(Ts... args)
+				{
+					return operator()(helpers::vector_of(args...));
+				}
+
+				const TypeInfo& returns() const
+				{
+					return return_type;
+				}
+
+				const std::vector<TypeInfo>& arguments() const
+				{
+					return arg_types;
+				}
+			};
+
+
+			template <typename T>
+			class code_type
+			{
+				std::function<std::vector<T>(std::vector<T>)> implementation;
+				std::vector<TypeInfo> return_types;
+				std::vector<TypeInfo> arg_types;
+
+				public:
+				code_type(
+					std::function<std::vector<T>(std::vector<T>)> imp,
+					const std::vector<TypeInfo>& output,
+					const std::vector<TypeInfo>& inputs
+				)
+				{
+					implementation = imp;
+					return_types = output;
+					arg_types = inputs;
+				}
+
+				code_type(
+					std::function<std::vector<T>(std::vector<T>)> imp,
+					const TypeInfo& of_type
+				)
+				{
+					implementation = imp;
+					return_types = of_type.code_inputs();
+					arg_types = of_type.code_outputs();
+				}
+
+				std::vector<T> operator()(std::vector<T> args)
+				{
+					return implementation(args);
+				}
+
+				template <typename... Ts>
+				std::vector<T> operator()(Ts... args)
+				{
+					return operator()(helpers::vector_of(args...));
+				}
+
+				const std::vector<TypeInfo>& returns() const
+				{
+					return return_types;
+				}
+
+				const std::vector<TypeInfo>& arguments() const
+				{
+					return arg_types;
+				}
+			};
 		}
 
 
 		using TypeInfo = implementation::TypeInfo;
 
 
+		struct Nothing
+		{};
+
+
 		using Value = boost::make_recursive_variant<
+			Nothing,
 			bool,
 			long int,
 			double,
 			std::vector<boost::recursive_variant_>,  // can hold both lists and tuples.
 			std::string,
-			boost::function1<boost::recursive_variant_, std::vector<boost::recursive_variant_>>,
-			boost::function1<std::vector<boost::recursive_variant_>, std::vector<boost::recursive_variant_>>
+			implementation::function_type<boost::recursive_variant_>,
+			implementation::code_type<boost::recursive_variant_>
 		>::type;
+
+
+#ifndef types_cc
+		extern const Value none;
+#endif
 
 
 		namespace representations
@@ -377,8 +508,9 @@ namespace doanimate
 			using List = std::vector<Value>;
 			using Tuple = std::vector<Value>;
 			using String = std::string;
-			using Function = boost::function1<Value, std::vector<Value>>;
-			using Code = boost::function1<std::vector<Value>, std::vector<Value>>;
+			using Function = implementation::function_type<Value>;
+			using Code = implementation::code_type<Value>;
+			using None = Nothing;
 		}
 
 
@@ -389,6 +521,15 @@ namespace doanimate
 
 
 		std::string to_string(const TypeInfo&);
+
+		namespace implementation
+		{
+			template <>
+			Value get_none<Value>()
+			{
+				return Nothing();
+			}
+		}
 	}
 }
 

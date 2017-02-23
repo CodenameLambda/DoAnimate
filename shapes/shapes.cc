@@ -90,7 +90,8 @@ namespace doanimate
 								return on_shape(
 									get_position(args[0])
 								)? c : transparent;
-							}
+							},
+							types::TypeInfo::renderable
 						),
 						types::representations::Function(
 							[=](std::vector<types::Value>)
@@ -101,17 +102,21 @@ namespace doanimate
 									false,
 									types::representations::Function(
 										[](std::vector<types::Value>)
-										-> types::Value
+										-> void
 										{
-											return long(0);
 										},
+										{types::TypeInfo::position, types::TypeInfo::position}
+									),
+									types::representations::Function(
 										[](std::vector<types::Value>)
 										{
 											return transparent;
-										}
+										},
+										types::TypeInfo::renderable
 									)
 								};
-							}
+							},
+							types::TypeInfo::interactable
 						)
 					};
 				},
@@ -224,7 +229,8 @@ namespace doanimate
 								if (on_shape(q))
 									return stroke;
 								return in_shape(q)? fill : transparent;
-							}
+							},
+							types::TypeInfo::renderable
 						),
 						types::representations::Function(
 							[=](std::vector<types::Value>)
@@ -235,17 +241,21 @@ namespace doanimate
 									false,
 									types::representations::Function(
 										[](std::vector<types::Value>)
-										-> types::Value
+										-> void
 										{
-											return long(0);
 										},
+										{types::TypeInfo::position, types::TypeInfo::position}
+									),
+									types::representations::Function(
 										[](std::vector<types::Value>)
 										{
 											return transparent;
-										}
+										},
+										types::TypeInfo::renderable
 									)
 								};
-							}
+							},
+							types::TypeInfo::interactable
 						)
 					};
 				},

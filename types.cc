@@ -1,3 +1,4 @@
+#define types_cc
 #include "types.hh"
 #include <unordered_map>
 
@@ -796,6 +797,9 @@ namespace doanimate
 				delete single_extension;
 			}
 		}
+
+
+		const Value none = Nothing();
 
 
 		TypeInfo simplify(const TypeInfo& t)
