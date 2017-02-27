@@ -17,7 +17,7 @@ add_subdirectory (shapes)
 set (DoAnimate_VERSION_MAJOR 1)
 set (DoAnimate_VERSION_MINOR 0)
 
-add_executable (DoAnimate main.cc types.hh types.cc)
+add_executable (DoAnimate main.cc types.hh types.cc render.hh)
 # target_link_libraries (DoAnimate nodes shapes helpers)
 target_link_libraries (DoAnimate nodes shapes)
 

@@ -1,5 +1,5 @@
-#ifndef node_NodeSystem_h
-#define node_NodeSystem_h
+#ifndef node_node_system_hh
+#define node_node_system_hh
 #include <vector>
 #include <tuple>
 #include <unordered_set>

@@ -1,3 +1,5 @@
+#ifndef shapes_shapes_hh
+#define shapes_shapes_hh
 #include "../nodes/node.hh"
 #include <functional>
 
@@ -21,3 +23,4 @@ namespace doanimate
 		nodes::Node* circle();
 	}
 }
+#endif
