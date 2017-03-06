@@ -59,7 +59,7 @@ namespace doanimate
 			const std::vector<types::TypeInfo>& output_type_infos,
 			const std::vector<std::string>& output_names,
 			const std::vector<types::Value>& default_inputs
-		)
+		) : Node(false)
 		{
 			this->implementation = implementation;
 			this->input_type_infos = input_type_infos;
