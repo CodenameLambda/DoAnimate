@@ -1,4 +1,3 @@
-int main()
-{
-	// TODO
+int main() {
+    // TODO
 }
